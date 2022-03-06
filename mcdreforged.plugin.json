@@ -1,0 +1,9 @@
+{
+    "id": "psmb_chatbridge",
+    "version": "1.0.0",
+    "name": "PSMB Chatbridge",
+    "dependencies": {
+        "mcdreforged": ">=2.0.0-alpha.1",
+        "more_apis": "*"
+    }
+}

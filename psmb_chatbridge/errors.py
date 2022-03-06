@@ -1,0 +1,4 @@
+
+
+class ClientNotAvailableError(RuntimeError):
+    pass
