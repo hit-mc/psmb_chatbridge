@@ -19,6 +19,7 @@ class PlayerMessage(Message):
     player_name: str
 
 class PlayerDeathMessage(PlayerMessage):
+    index: int
     death_position: Tuple[float, float, float]
     death_dim: int # Dim ID
 
@@ -26,7 +27,7 @@ class PlayerAdvancementMessage(PlayerMessage):
     pass
 
 
-class PlayerServerChatMessage(PlayerMessage):
+class PlayerChatMessage(PlayerMessage):
     pass
 
 class ServerCrashedMessage(Message):

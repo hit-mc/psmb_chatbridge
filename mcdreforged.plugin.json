@@ -4,6 +4,7 @@
     "name": "PSMB Chatbridge",
     "dependencies": {
         "mcdreforged": ">=2.0.0-alpha.1",
-        "more_apis": "*"
+        "more_apis": "*",
+        "minecraft_data_api": "*"
     }
 }

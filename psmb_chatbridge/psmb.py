@@ -28,8 +28,7 @@ class Client:
     async def _pub(self) -> None:
         on_con_lost = asyncio.Future()
         on_exchange_ready = asyncio.Event()
-        loop = asyncio.get_running_loop()
-        transport, protocol = await loop.create_connection(
+        transport, protocol = await self.loop.create_connection(
             lambda: PublishProtocol(
                 topic=self.pub_topic,
                 on_con_lost=on_con_lost,
@@ -44,8 +43,7 @@ class Client:
     async def _sub(self) -> None:
         on_con_lost = asyncio.Future()
         on_exchange_ready = asyncio.Event()
-        loop = asyncio.get_event_loop()
-        transport, protocol = await loop.create_connection(
+        transport, protocol = await self.loop.create_connection(
             lambda: SubscribeProtocol(self.sub_id_pattern, *self.handlers,
                                       subscriber_id=self.sub_id,
                                       on_con_lost=on_con_lost,
@@ -62,13 +60,18 @@ class Client:
     def establish(self):
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
+        self.loop = loop
         self.pub_task = loop.create_task(self._pub())
         self.sub_task = loop.create_task(self._sub())
         loop.run_forever()
 
     def close(self):
+        self.pub_transport.write(b'BYE')
+        self.sub_transport.write(b'BYE') # 协议本不应如此，但如果不这么写的话，PSMB Server可能不会主动断开连接？
         self.pub_transport.close()
         self.sub_transport.close()
+        self.loop.stop()
+        # self.loop.close()
 
     async def publish(self, msg):
         if not self.pub_task.done():
