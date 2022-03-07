@@ -6,7 +6,6 @@ from typing import Callable
 from .errors import ClientNotAvailableError
 
 
-
 class Client:
 
     def __init__(self,
@@ -67,7 +66,8 @@ class Client:
 
     def close(self):
         self.pub_transport.write(b'BYE')
-        self.sub_transport.write(b'BYE') # 协议本不应如此，但如果不这么写的话，PSMB Server可能不会主动断开连接？
+        self.sub_transport.write(b'BYE')
+        # Subscriber协议本不应如此，但如果不这么写的话，PSMB Server可能不会主动断开连接？
         self.pub_transport.close()
         self.sub_transport.close()
         self.loop.stop()
@@ -75,7 +75,9 @@ class Client:
 
     async def publish(self, msg):
         if not self.pub_task.done():
-            raise ClientNotAvailableError("Connection for publishing is not available now.")
+            raise ClientNotAvailableError(
+                "Connection for publishing is not available now.")
         if not self.sub_task.done():
-            raise ClientNotAvailableError("Connection for subscription is not available now.")
+            raise ClientNotAvailableError(
+                "Connection for subscription is not available now.")
         await self.pub_protocol.send_msg(msg)

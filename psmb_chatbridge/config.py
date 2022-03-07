@@ -3,16 +3,18 @@ from pydantic import BaseModel
 import os.path
 import os
 
+
 class _PSMBConfig(BaseModel):
     psmb_host: str = '127.0.0.1'
     psmb_port: int = 1234
     psmb_pub_topic: str = 's2q'
     psmb_sub_id_pattern: str = 'q2s'
     psmb_enable_tls: bool = False
-    psmb_subscriber_id: int = 3 # Client ID 用这个来区分是否为自己
+    psmb_subscriber_id: int = 3  # Client ID 用这个来区分是否为自己
+
 
 class Config(_PSMBConfig):
-    subserver_name: str # 你的某一个子服的名字，例如survival creative mirror
+    subserver_name: str  # 你的某一个子服的名字，例如survival creative mirror
 
 
 def load_config(path: str) -> Config:

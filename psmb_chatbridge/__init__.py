@@ -8,7 +8,7 @@ import asyncio
 from .message import Message, MessageType, PlayerChatMessage, PlayerDeathMessage
 client: Client
 config: Config
-base_msg: Message # 带有client_id client_name 的基础消息
+base_msg: Message  # 带有client_id client_name 的基础消息
 broadcaster: MCServerBroadcaster
 
 
@@ -23,7 +23,8 @@ def on_load(server: PluginServerInterface, old):
     path = server.get_data_folder()
     config = load_config(path)
 
-    broadcaster = MCServerBroadcaster(server, config.psmb_subscriber_id)
+    broadcaster = MCServerBroadcaster(
+        server, config.psmb_subscriber_id, config.subserver_name)
     client = Client(config.psmb_host,
                     config.psmb_port,
                     config.psmb_enable_tls,
@@ -32,7 +33,8 @@ def on_load(server: PluginServerInterface, old):
                     config.psmb_subscriber_id,
                     broadcaster.broadcast)
     client.establish()
-    base_msg = Message(client_name=config.subserver_name, client_id=config.psmb_subscriber_id, msg_type=MessageType.PLAYER_CHAT, content='')
+    base_msg = Message(client_name=config.subserver_name,
+                       client_id=config.psmb_subscriber_id, msg_type=MessageType.PLAYER_CHAT, content='')
 
 
 def on_unload(server: PluginServerInterface):
@@ -46,44 +48,49 @@ def on_unload(server: PluginServerInterface):
 def publish(msg):
     asyncio.run(client.publish(msg))
 
+
 @new_thread('psmb death message')
 def death_message(server: ServerInterface, index: int, msg: str, player_name: str | None):
     if player_name is not None:
         api = server.get_plugin_instance('minecraft_data_api')
         pos = api.get_player_coordinate(player_name)
-        resp_model = PlayerDeathMessage(**base_msg.dict(), 
-        death_position=(pos.x, pos.y, pos.z), 
-        death_dim=api.get_player_dimension(player_name),
-        player_name=player_name,
-        index=index)
+        resp_model = PlayerDeathMessage(**base_msg.dict(),
+                                        death_position=(pos.x, pos.y, pos.z),
+                                        death_dim=api.get_player_dimension(
+                                            player_name),
+                                        player_name=player_name,
+                                        index=index)
         resp_model.content = msg
         resp_model.msg_type = MessageType.PLAYER_DEATH
-        publish(resp_model.json())
+        publish(resp_model.json())  # new_thread 这个装饰器类型提示不好使，会导致Pylance出错
     else:
         # 没玩家名字？没道理啊，先抛异常吧
         raise NotImplementedError("Nobody dead?")
 
+
 @new_thread('psmb player chat')
-def player_chat(server: ServerInterface, index: int, msg: str, player_name: str | None):
+def player_chat(server: ServerInterface, msg: str, player_name: str):
+    resp_model = PlayerChatMessage(**base_msg.dict(),
+                                   player_name=player_name)
+    resp_model.content = msg
+    resp_model.msg_type = MessageType.PLAYER_CHAT
+    publish(resp_model.json())  # new_thread
     pass
 
 
 @event_listener('more_apis.death_message')
 def _(server: ServerInterface, index: int, msg: str, player_name: str | None):
     # 悲报
-    death_message(server, index, msg, player_name) # 被装饰，可以调用，没问题
-    
+    death_message(server, index, msg, player_name)  # 还是 new_thread
+
+
 @event_listener('more_apis.player_made_advancement')
 def _(server: ServerInterface, advancement):
     # 喜报
     pass
 
-@event_listener('more_apis.server_crashed')
-def _(server: ServerInterface, crash_path):
-    pass
 
 @event_listener('mcdr.user_info')
 def _(server: PluginServerInterface, info: Info):
-    resp_model = PlayerChatMessage(**base_msg.dict(), player_name=info.content)
-    resp_model.msg_type = MessageType.PLAYER_CHAT
-    pass
+    assert info.content is not None  # 这个监听器是user_info，content字段应该不可能为None
+    player_chat(server, info.content， info.player)
