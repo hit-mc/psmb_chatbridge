@@ -5,7 +5,6 @@ name = "pypi"
 
 [packages]
 mcdreforged = "*"
-pypsmb = "*"
 pydantic = "*"
 
 [dev-packages]

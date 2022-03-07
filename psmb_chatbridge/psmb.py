@@ -1,4 +1,4 @@
-from pypsmb.client import SubscribeProtocol, PublishProtocol
+from .pypsmb_client import SubscribeProtocol, PublishProtocol
 import asyncio
 from mcdreforged.api.all import new_thread
 from typing import Any
