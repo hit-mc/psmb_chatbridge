@@ -10,11 +10,12 @@ class _PSMBConfig(BaseModel):
     psmb_pub_topic: str = 's2q'
     psmb_sub_id_pattern: str = 'q2s'
     psmb_enable_tls: bool = False
-    psmb_subscriber_id: int = 3  # Client ID 用这个来区分是否为自己
+    client_id: int = 3  # Client ID 用这个来区分是否为自己
+    enable_tls: bool = False # 启用TLS
 
 
 class Config(_PSMBConfig):
-    subserver_name: str  # 你的某一个子服的名字，例如survival creative mirror
+    client_name: str  # 你的某一个子服的名字，例如survival creative mirror
 
 
 def load_config(path: str) -> Config:
@@ -22,7 +23,7 @@ def load_config(path: str) -> Config:
     if not os.path.exists(config_path):
         # Generate skeleton file
         with open(config_path, 'w') as f:
-            d = Config(subserver_name='survival')
+            d = Config(client_name='survival')
             f.write(d.json())
         raise RuntimeError("No config file. Generated a schema config.")
     return Config.parse_file(config_path)

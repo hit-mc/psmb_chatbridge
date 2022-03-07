@@ -24,17 +24,17 @@ def on_load(server: PluginServerInterface, old):
     config = load_config(path)
 
     broadcaster = MCServerBroadcaster(
-        server, config.psmb_subscriber_id, config.subserver_name)
+        server, config.client_id, config.client_name)
     client = Client(config.psmb_host,
                     config.psmb_port,
                     config.psmb_enable_tls,
                     config.psmb_pub_topic,
                     config.psmb_sub_id_pattern,
-                    config.psmb_subscriber_id,
+                    config.client_id,
                     broadcaster.broadcast)
     client.establish()
-    base_msg = Message(client_name=config.subserver_name,
-                       client_id=config.psmb_subscriber_id, msg_type=MessageType.PLAYER_CHAT, content='')
+    base_msg = Message(client_name=config.client_name,
+                       client_id=config.client_id, msg_type=MessageType.PLAYER_CHAT, content='')
 
 
 def on_unload(server: PluginServerInterface):
@@ -92,5 +92,7 @@ def _(server: ServerInterface, advancement):
 
 @event_listener('mcdr.user_info')
 def _(server: PluginServerInterface, info: Info):
-    assert info.content is not None  # 这个监听器是user_info，content字段应该不可能为None
-    player_chat(server, info.content， info.player)
+    if info.player is not None:
+        player_chat(server, info.content, info.player)
+    else:
+        print(info.content)

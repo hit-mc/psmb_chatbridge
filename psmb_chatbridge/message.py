@@ -5,9 +5,9 @@ from pydantic import BaseModel
 
 class MessageType(enum.Enum):
     PLAYER_DEATH = 1
-    SERVER_CRASHED = 2
-    PLAYER_CHAT = 3
-    PLAYER_ADVANCEMENT = 4
+    PLAYER_CHAT = 2
+    PLAYER_ADVANCEMENT = 3
+    QQ_GROUP = 4
 
 
 class Message(BaseModel):
@@ -17,6 +17,10 @@ class Message(BaseModel):
     content: str
 
 
+class QQGroupMessage(Message):
+    pass
+
+
 class PlayerMessage(Message):
     player_name: str
 
@@ -24,7 +28,7 @@ class PlayerMessage(Message):
 class PlayerDeathMessage(PlayerMessage):
     index: int
     death_position: Tuple[float, float, float]
-    death_dim: str  # Dim ID
+    death_dim: int  # Dim ID
 
 
 class PlayerAdvancementMessage(PlayerMessage):
