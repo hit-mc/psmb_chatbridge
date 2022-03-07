@@ -2,6 +2,7 @@ import enum
 from typing import Tuple
 from pydantic import BaseModel
 
+
 class MessageType(enum.Enum):
     PLAYER_DEATH = 1
     SERVER_CRASHED = 2
@@ -15,13 +16,16 @@ class Message(BaseModel):
     msg_type: MessageType
     content: str
 
+
 class PlayerMessage(Message):
     player_name: str
+
 
 class PlayerDeathMessage(PlayerMessage):
     index: int
     death_position: Tuple[float, float, float]
-    death_dim: int # Dim ID
+    death_dim: str  # Dim ID
+
 
 class PlayerAdvancementMessage(PlayerMessage):
     pass
@@ -29,6 +33,7 @@ class PlayerAdvancementMessage(PlayerMessage):
 
 class PlayerChatMessage(PlayerMessage):
     pass
+
 
 class ServerCrashedMessage(Message):
     pass
