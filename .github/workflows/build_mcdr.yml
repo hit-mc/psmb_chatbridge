@@ -18,7 +18,7 @@ jobs:
     - run: mkdir output
     - run: python -m mcdreforged pack -o output --name psmb_chatbridge.mcdr
     - name: Upload notes
-        uses: actions/upload-artifact@v2
-        with:
-          name: psmb_chatbridge.mcdr
-          path: output/psmb_chatbridge.mcdr
+      uses: actions/upload-artifact@v2
+      with:
+        name: psmb_chatbridge.mcdr
+        path: output/psmb_chatbridge.mcdr
