@@ -17,9 +17,10 @@ jobs:
         python-version: ${{ matrix.python-version }}
         cache: 'pipenv'
     - run: pipenv install
+    - run: pipenv shell
     - run: mkdir output
     - run: python -m mcdreforged pack -o output --name psmb_chatbridge.mcdr
-    - name: Upload notes
+    - name: Upload
       uses: actions/upload-artifact@v2
       with:
         name: psmb_chatbridge.mcdr
