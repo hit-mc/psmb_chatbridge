@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 mcdreforged = "*"
 pydantic = "*"
+psmb-client = "*"
+hitmc-messages = "*"
 
 [dev-packages]
 autopep8 = "*"

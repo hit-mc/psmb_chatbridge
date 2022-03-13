@@ -1,2 +1,0 @@
-class ClientNotAvailableError(RuntimeError):
-    pass

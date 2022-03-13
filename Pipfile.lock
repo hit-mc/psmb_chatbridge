@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "a19274546bad01d8c481bd6b29e64d76f134306ec33225a8be689e756b8f30b1"
+            "sha256": "1f649ae5deb5062600866394d6f2bea9f0e0fff3b93d9befa423951583150ceb"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -44,8 +44,15 @@
                 "sha256:344f73204009e4c83c5b6beb00b3c45dc70fcdae3c80db919e0a4171d006fde8",
                 "sha256:351c51e866c86c3217f08e4b067a7974a678be78f07f85fc2d55b8babde6d94e"
             ],
-            "markers": "python_full_version >= '3.6.0'",
+            "markers": "python_version >= '3.6'",
             "version": "==6.6.0"
+        },
+        "hitmc-messages": {
+            "hashes": [
+                "sha256:11c59bc43def452fdd1a2d39a5e3d33db75e759860651fdd0879c9f7164362fc"
+            ],
+            "index": "pypi",
+            "version": "==0.0.1"
         },
         "idna": {
             "hashes": [
@@ -54,6 +61,14 @@
             ],
             "markers": "python_version >= '3'",
             "version": "==3.3"
+        },
+        "loguru": {
+            "hashes": [
+                "sha256:066bd06758d0a513e9836fd9c6b5a75bfb3fd36841f4b996bc60b547a309d41c",
+                "sha256:4e2414d534a2ab57573365b3e6d0234dfb1d84b68b7f3b948e6fb743860a77c3"
+            ],
+            "markers": "python_version >= '3.5'",
+            "version": "==0.6.0"
         },
         "mcdreforged": {
             "hashes": [
@@ -76,6 +91,13 @@
             ],
             "markers": "python_full_version >= '3.6.2'",
             "version": "==3.0.28"
+        },
+        "psmb-client": {
+            "hashes": [
+                "sha256:a3e4c05fc5a6f5558da110e2e4f7cf31b9f45f3c526d1b7ae9373497c666f2dd"
+            ],
+            "index": "pypi",
+            "version": "==0.1.0"
         },
         "psutil": {
             "hashes": [
@@ -208,7 +230,7 @@
                 "sha256:1a9462dcc3347a79b1f1c0271fbe79e844580bb598bafa1ed208b94da3cdcd42",
                 "sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2"
             ],
-            "markers": "python_full_version >= '3.6.0'",
+            "markers": "python_version >= '3.6'",
             "version": "==4.1.1"
         },
         "urllib3": {
