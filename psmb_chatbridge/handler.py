@@ -50,7 +50,7 @@ class MCServerBroadcaster:
     @staticmethod
     def rjoin(msg: PlayerMessage) -> RTextList:
         return RTextList(RText('[{}]'.format(msg.client_name), color=RColor.aqua),
-                         RText('<{}>'.format(msg.player_name), RColor.dark_aqua),
+                         RText('{}'.format(msg.player_name), RColor.dark_aqua),
                          RText(" joined the game", RColor.white))
 
     @staticmethod
@@ -75,7 +75,7 @@ class MCServerBroadcaster:
         if msg.client_id != self._client_id:
             self._server.broadcast(self.rleft(msg))
 
-    def _player_list(self, msg: Message):
+    def _player_list(self):
         # Server List 请求不可能自己发出
         api = self._server.get_plugin_instance('minecraft_data_api')
         result = api.get_server_player_list()  # type: ignore
@@ -90,7 +90,7 @@ class MCServerBroadcaster:
                          args=(resp_model.json(), 5)).start()
 
     def player_list(self, msg: Message):
-        threading.Thread(target=self._player_list, args=(msg)).start()
+        threading.Thread(target=self._player_list).start()
 
     def server_ping(self, msg: Message):
         resp_model = Message(**self._base_msg.dict())
